@@ -46,7 +46,7 @@ public class UserDao {
 
 			try {
 				connection = DriverManager
-						.getConnection("jdbc:mysql://localhost:3306/temple","root", "root123");
+						.getConnection("jdbc:mysql://localhost:3305/temple","root", "Champions@1"); // Champions@1
 
 			} catch (SQLException e) {
 				System.out.println("Connection Failed! Check output console");
@@ -110,7 +110,7 @@ public class UserDao {
 
 	// with query 
 
-	public List<User> getAllUsers(String name,String from, String to, String number){
+	public List<User> getAllUsers(String name,String from, String to, String searchParam){
 		List<User> userList = null;
 		Statement stmt = null;
 		try {
@@ -129,7 +129,7 @@ public class UserDao {
 
 			try {
 				connection = DriverManager
-						.getConnection("jdbc:mysql://localhost:3306/temple","root", "root123");
+						.getConnection("jdbc:mysql://localhost:3305/temple","root", "Champions@1");
 
 			} catch (SQLException e) {
 				System.out.println("Connection Failed! Check output console");
@@ -156,7 +156,7 @@ public class UserDao {
 					System.out.println("name:"+name);
 					System.out.println("to:"+to);
 					System.out.println("from:"+from);
-					System.out.println("number:"+number);
+					System.out.println("searchParam:"+searchParam);
 					if(name == null) {
 						System.out.println("name is null");
 					}
@@ -166,11 +166,11 @@ public class UserDao {
 					if(from == null) {
 						System.out.println("from is null");
 					}
-					if(number == null) {
-						System.out.println("from is null");
+					if(searchParam == null) {
+						System.out.println("searchParam is null");
 					}
-					if(number != null) {
-						sql = "SELECT id,devoteename,cost,nakshatra,gotra,sevadate,paymentdate,savaname,contactnum FROM SEVAS WHERE contactnum="+"\'"+number+"\'";
+					if(searchParam != null) {
+						sql = "SELECT id,devoteename,cost,nakshatra,gotra,sevadate,paymentdate,savaname,contactnum FROM SEVAS WHERE contactnum="+"\'"+searchParam+"\'+ or devoteename="+"\'"+searchParam+"\'";
 
 					}else {
 						if((name == null)&&(from == null)&&( to == null)) {
@@ -253,7 +253,7 @@ public class UserDao {
 
 			try {
 				connection = DriverManager
-						.getConnection("jdbc:mysql://localhost:3306/temple","root", "root123");
+						.getConnection("jdbc:mysql://localhost:3305/temple","root", "Champions@1");
 
 			} catch (SQLException e) {
 				System.out.println("Connection Failed! Check output console");
@@ -403,7 +403,7 @@ public class UserDao {
 
 			try {
 				connection = DriverManager
-						.getConnection("jdbc:mysql://localhost:3306/temple","root", "root123");
+						.getConnection("jdbc:mysql://localhost:3305/temple","root", "Champions@1");
 
 			} catch (SQLException e) {
 				System.out.println("Connection Failed! Check output console");
@@ -495,7 +495,7 @@ public class UserDao {
 
 			try {
 				connection = DriverManager
-						.getConnection("jdbc:mysql://localhost:3306/temple","root", "root123");
+						.getConnection("jdbc:mysql://localhost:3305/temple","root", "Champions@1");
 
 			} catch (SQLException e) {
 				System.out.println("Connection Failed! Check output console");

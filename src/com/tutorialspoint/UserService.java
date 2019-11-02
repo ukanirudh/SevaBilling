@@ -33,8 +33,8 @@ public class UserService {
    
    @Produces(MediaType.APPLICATION_JSON)
    public List<User> getUsers(@QueryParam("sevaName") String name,@QueryParam("from") String from,
-			@QueryParam("to") String to,@QueryParam("number") String number){
-       return userDao.getAllUsers(name,from,to,number);
+			@QueryParam("to") String to,@QueryParam("searchParam") String searchParam){
+       return userDao.getAllUsers(name,from,to,searchParam);
    }
    
    @GET
