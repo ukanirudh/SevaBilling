@@ -170,7 +170,7 @@ public class UserDao {
 						System.out.println("searchParam is null");
 					}
 					if(searchParam != null) {
-						sql = "SELECT id,devoteename,cost,nakshatra,gotra,sevadate,paymentdate,savaname,contactnum FROM SEVAS WHERE contactnum="+"\'"+searchParam+"\'+ or devoteename="+"\'"+searchParam+"\'";
+						sql = "SELECT id,devoteename,cost,nakshatra,gotra,sevadate,paymentdate,savaname,contactnum FROM SEVAS WHERE contactnum="+"\'"+searchParam+"\'";
 
 					}else {
 						if((name == null)&&(from == null)&&( to == null)) {
