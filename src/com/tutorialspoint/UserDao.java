@@ -385,7 +385,7 @@ public class UserDao {
 
 
 	private int saveUserList(User pUser){
-		int id =0;
+		int retId =0;
 		try {
 			PreparedStatement preparedStmt = null;
 			System.out.println("-------- MySQL JDBC Connection Testing ------------");
@@ -412,39 +412,35 @@ public class UserDao {
 			}
 			//#####################################################
 			if (connection != null) {
-				System.out.println("You made it, take control your database now!");
-				
 					System.out.println("You made it, take control your database now!");
-					String sql = "insert into SEVAS (devoteename, cost, nakshatra, gotra,sevadate,paymentdate,savaname,contactnum)"+ " values (?, ?, ?, ?, ?,?,?,?)";
-					Calendar calendar = Calendar.getInstance();
-
-					//java.sql.Date startDate = new java.sql.Date(calendar.get));
+					String sql = "insert into SEVAS (id,devoteename, cost, nakshatra, gotra,sevadate,paymentdate,savaname,contactnum)"+ " values (?,?, ?, ?, ?, ?,?,?,?)";
 					System.out.println("You made it, take control your database now! 1");
 					// create the mysql insert preparedstatement
 					preparedStmt =connection.prepareStatement(sql);
-
-					preparedStmt.setString(1,pUser.getDevoteeName());
-					preparedStmt.setInt    (2, pUser.getCost());
-					preparedStmt.setString (3, pUser.getNakshatra());
-					preparedStmt.setString(4,pUser.getGotra());
-					preparedStmt.setDate(5,Date.valueOf(pUser.getSevaDate()));
-					preparedStmt.setDate(6,java.sql.Date.valueOf(java.time.LocalDate.now()));
-					preparedStmt.setString (7,pUser.getSevaName());
-					preparedStmt.setString (8,pUser.getContactNum());
+					preparedStmt.setLong(1, pUser.getId());
+					preparedStmt.setString(2,pUser.getDevoteeName());
+					preparedStmt.setInt(3, pUser.getCost());
+					preparedStmt.setString (4, pUser.getNakshatra());
+					preparedStmt.setString(5,pUser.getGotra());
+					preparedStmt.setDate(6,Date.valueOf(pUser.getSevaDate()));
+					preparedStmt.setDate(7,java.sql.Date.valueOf(java.time.LocalDate.now()));
+					preparedStmt.setString (8,pUser.getSevaName());
+					preparedStmt.setString (9,pUser.getContactNum());
 
 					// execute the preparedstatement
 					
 					int flag= preparedStmt.executeUpdate();
 					System.out.println("flag::"+ flag);
 					if(flag==1) {
-						String sqlRet ="SELECT id FROM sevas ORDER BY id DESC LIMIT 1";
-						PreparedStatement preparedStmtR = null;
-						preparedStmtR =connection.prepareStatement(sqlRet);
-						ResultSet rs = preparedStmtR.executeQuery();
-						while(rs.next()){
-						  id  = rs.getInt("id");	
-						  System.out.println("result::"+ id);
-						}
+//						String sqlRet ="SELECT id FROM sevas ORDER BY id DESC LIMIT 1";
+//						PreparedStatement preparedStmtR = null;
+//						preparedStmtR =connection.prepareStatement(sqlRet);
+//						ResultSet rs = preparedStmtR.executeQuery();
+//						while(rs.next()){
+//						  retId  = rs.getInt("id");	
+//						  System.out.println("result::"+ retId);
+//						}
+						retId = pUser.getId();
 						
 					}
 					if((pUser.getSevaName()).equals("shaswatha-seva")) {
@@ -473,7 +469,7 @@ public class UserDao {
 			e.printStackTrace();
 		}
 
-      return id;
+      return retId;
 	}
 
 

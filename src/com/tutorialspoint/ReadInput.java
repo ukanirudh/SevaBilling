@@ -6,7 +6,7 @@ import javax.json.bind.annotation.JsonbProperty;
 
 public class ReadInput {
 	
-	 
+	    private Integer id;
 	    private String devoteeName; 
 	    private int cost;
 	    private String contactNum;
@@ -18,6 +18,13 @@ public class ReadInput {
 	    
 	    
 	    
+		
+		public Integer getId() {
+			return id;
+		}
+		public void setId(Integer id) {
+			this.id = id;
+		}
 		public String getContactNum() {
 			return contactNum;
 		}

@@ -2,6 +2,7 @@ package com.tutorialspoint;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
@@ -83,7 +84,12 @@ public class UserService {
    public Response getUserById(ReadInput input){
        
        System.out.println("Received order from :"+input.getDevoteeName());
-       User user = new User(5,input.getDevoteeName(),input.getCost(),input.getNakshatra(),input.getGotra(),input.getSevaName(),input.getSevaDate(),input.getPaymentDate(),input.getContactNum());
+       if((input.getId()) == null) {
+    	   Random rand = new Random();
+    	   int num = rand.nextInt(9000000) + 1000000;
+    	   input.setId(num);
+       };
+       User user = new User(input.getId(),input.getDevoteeName(),input.getCost(),input.getNakshatra(),input.getGotra(),input.getSevaName(),input.getSevaDate(),input.getPaymentDate(),input.getContactNum());
        int result = userDao.addUser(user);
 		System.out.println("result::"+ result);
        if(result != 0){
@@ -92,7 +98,10 @@ public class UserService {
            return Response.status(200).entity(resultString).build(); 
        }
        else {
-    	   return Response.status(500).entity("Error").build();
+    	   String resultString = "{\"success\":false,\"message\": \"Duplicate entry for Id. please give another number\",\"data\":null}";
+
+           return Response.status(401).entity(resultString).build(); 
+    	   
        } 
    }
 
