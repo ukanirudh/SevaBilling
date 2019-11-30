@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
+import javax.json.JsonArray;
+import javax.json.JsonObject;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -81,9 +83,9 @@ public class UserService {
 //      }
 //      return FAILURE_RESULT;
 //   }
-   public Response getUserById(ReadInput input){
+   public Response getUserById( ReadInput   input){
        
-       System.out.println("Received order from :"+input.getDevoteeName());
+       System.out.println("Received order from :"+input);
        if((input.getId()) == null) {
     	   Random rand = new Random();
     	   int num = rand.nextInt(9000000) + 1000000;
@@ -98,13 +100,70 @@ public class UserService {
            return Response.status(200).entity(resultString).build(); 
        }
        else {
-    	   String resultString = "{\"success\":false,\"message\": \"Duplicate entry for Id. please give another number\",\"data\":null}";
-
-           return Response.status(401).entity(resultString).build(); 
+   	       String resultString = "{\"success\":false,\"message\": \"Duplicate entry for Id. please give another number\",\"data\":null}";
+           return Response.status(400).entity(resultString).build(); 
     	   
-       } 
+        } 
    }
 
+   
+   @POST
+   @Path("/upload_sevas")
+   @Produces(MediaType.APPLICATION_JSON)
+   @Consumes(MediaType.APPLICATION_JSON)
+   public Response addSevas(JsonArray inputJson){
+	   int result = 0;
+       System.out.println("Received order from :"+inputJson);
+       //JsonArray getArray = getObject.getJsonArray("JArray1");
+       ReadInput input = new ReadInput();
+       for(int i =0; i< inputJson.size(); i++) {
+    	 
+    	   if(inputJson.getJsonObject(i).containsKey("id")) {
+    	       System.out.println("Inside IF :"+inputJson.getJsonObject(i).getInt("id"));
+  
+    	     input.setId((inputJson.getJsonObject(i).getInt("id")));
+    	     
+    	   }  
+    	   
+    	   input.setContactNum(inputJson.getJsonObject(i).getString("contactNum"));
+    	   input.setCost(inputJson.getJsonObject(i).getInt("cost"));
+    	   input.setDevoteeName(inputJson.getJsonObject(i).getString("devoteeName"));
+    	   input.setGotra(inputJson.getJsonObject(i).getString("gotra"));
+    	   input.setNakshatra(inputJson.getJsonObject(i).getString("nakshatra"));
+    	   input.setSevaDate(inputJson.getJsonObject(i).getString("sevaDate"));
+    	   input.setSevaName(inputJson.getJsonObject(i).getString("sevaName"));
+       
+	       if((input.getId()) == null) {
+	    	   Random rand = new Random();
+	    	   int num = rand.nextInt(9000000) + 1000000;
+	    	   input.setId(num);
+	       };
+	       User user = new User(input.getId(),input.getDevoteeName(),input.getCost(),input.getNakshatra(),input.getGotra(),input.getSevaName(),input.getSevaDate(),input.getPaymentDate(),input.getContactNum());
+	       result = userDao.addUser(user);
+	       input.setId(null);
+	       
+     }
+			System.out.println("result::"+ result);
+	       if(result != 0){
+	    	   String resultString = "{\"success\":true}";
+	
+	           return Response.status(200).entity(resultString).build(); 
+	       }
+	       else {
+	   	       String resultString = "{\"success\":false}";
+	           return Response.status(400).entity(resultString).build(); 
+	    	   
+	        } 
+       
+     }
+   
+   
+   
+   
+   
+   
+   
+   
    @PUT
    @Path("/seva")
    @Produces(MediaType.APPLICATION_XML)
@@ -115,7 +174,7 @@ public class UserService {
       @Context HttpServletResponse servletResponse) throws IOException{
 //     User user = new User(3,"qq",1,"DD","FF","ZZ"," "," ");
 //      int result = userDao.updateUser(user);
-//      if(result == 1){
+//      if(result == 1){ 
 //         return SUCCESS_RESULT;
   //    }
       return FAILURE_RESULT;
