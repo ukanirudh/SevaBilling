@@ -1,5 +1,5 @@
 package com.tutorialspoint;
-
+//Champions@1
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -534,9 +534,9 @@ public class UserDao {
 					System.out.println("Seva Date: "+userList.get(i).getSevaDate());				
 					System.out.println("Name: "+userList.get(i).getDevoteeName());				
 
-                    String message ="Gentle reminder! "+userList.get(i).getDevoteeName()+", "+userList.get(i).getSevaName()+" is  on "+userList.get(i).getSevaDate().substring(5);
+                    String message ="Gentle reminder! "+userList.get(i).getDevoteeName()+", "+userList.get(i).getSevaName()+" is  on "+userList.get(i).getSevaDate().substring(8)+"/"+userList.get(i).getSevaDate().substring(5,7);
 					String requestUrl  = "http://sms.ssdindia.com/api/sendhttp.php?mobiles="+userList.get(i).getContactNum()+"&authkey=17650A5fTICfF5d6792b4&route=5&sender=WEBSMS&message="+message+"&country=91";
-	        		URL url = new URL(requestUrl);
+	        		URL url = new URL(requestUrl); 
 	        		HttpURLConnection uc = (HttpURLConnection)url.openConnection();
 	        		System.out.println(uc.getResponseMessage());
 	        		uc.disconnect();
