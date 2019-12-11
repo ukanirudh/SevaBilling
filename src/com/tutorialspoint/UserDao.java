@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -51,7 +52,7 @@ public class UserDao {
 			} catch (SQLException e) {
 				System.out.println("Connection Failed! Check output console");
 				e.printStackTrace();
-				return null;
+				return null; 
 			}
 
 			if (connection != null) {
@@ -502,27 +503,16 @@ public class UserDao {
 
 
 			if (connection != null) {
-				System.out.println("You made it, take control your database now!");
-				// FileInputStream fis = new FileInputStream(file);
-				// ObjectInputStream ois = new ObjectInputStream(fis);
-				//userList = (List<User>) ois.readObject();
-				//ois.close();
-				
-				
-				
-				String sql = "SELECT id,devoteename,cost,nakshatra,gotra,sevadate,paymentdate,savaname,contactnum FROM SEVAS WHERE sevadate = ? and savaname = 'shaswatha-seva'";
+				System.out.println("You made it, take control your database now!");		
+				String sql = "SELECT id,devoteename,cost,nakshatra,gotra,sevadate,paymentdate,savaname,contactnum FROM SEVAS WHERE DATE_FORMAT(sevadate,'%m-%d') = DATE_FORMAT('"+java.sql.Date.valueOf(java.time.LocalDate.now().plusDays(2))+"','%m-%d') and savaname = 'shaswatha-seva'";
 				System.out.println("You made it, take control your database now! 1");
 				Statement stmt = connection.createStatement();
 				PreparedStatement preparedStmt = null;
 				preparedStmt =connection.prepareStatement(sql);
-				preparedStmt.setDate(1,java.sql.Date.valueOf(java.time.LocalDate.now().plusDays(2)));
-				
 				ResultSet rs = preparedStmt.executeQuery();
-				//STEP 5: Extract data from result set
 				System.out.println("You made it, take control your database now! 2");
 				List<User> userList = new ArrayList<User>();
 				while(rs.next()){
-					//Retrieve by column name
 					System.out.println("You made it, take control your database now!");
 					int id  = rs.getInt("id");
 					String devoteeName = rs.getString("devoteename");
@@ -533,7 +523,6 @@ public class UserDao {
 					Date sevaDate = rs.getDate("sevaDate");
 					Date paymentDate = rs.getDate("paymentDate");
 					String contactNum  = rs.getString("contactnum");
-					//Display values
 					User user = new User(id, devoteeName, cost,nakshatra,gotra,savaname,sevaDate.toString(),paymentDate.toString(),contactNum);
 					userList.add(user);
 
@@ -541,34 +530,16 @@ public class UserDao {
 
 				for(int i =0; i <userList.size();i++ ) {
 					String recipient =userList.get(i).getContactNum();
-					//String message = " Hi! "+userList.get(i).getDevoteeName();  //+" booked on "+userList.get(i).getSevaDate();
+					System.out.println("Number: "+userList.get(i).getContactNum());
+					System.out.println("Seva Date: "+userList.get(i).getSevaDate());				
+					System.out.println("Name: "+userList.get(i).getDevoteeName());				
 
-					System.out.println("num: "+userList.get(i).getContactNum());
-//					        		String requestUrl  = "http://127.0.0.1:9501/api?action=sendmessage&" +
-//					        		 "username=" + URLEncoder.encode(username, "UTF-8") +
-//					        		 "&password=" + URLEncoder.encode(password, "UTF-8") +
-//					        		 "&recipient=" + URLEncoder.encode(recipient, "UTF-8") +
-//					        		 "&messagetype=SMS:TEXT" +
-//					        		 "&messagedata=" + URLEncoder.encode(message, "UTF-8") +
-//					        		 "&originator=" + URLEncoder.encode(originator, "UTF-8") +
-//					        		 "&serviceprovider=GSMModem1" +
-//					        		 "&responseformat=html";
-//					        		URL url = new URL(requestUrl);
-//					        		HttpURLConnection uc = (HttpURLConnection)url.openConnection();
-//					        		System.out.println(uc.getResponseMessage());
-//					        		uc.disconnect();
-					
-					
-					
-                    String message ="Gentle reminder! "+userList.get(i).getDevoteeName()+", "+userList.get(i).getSevaName()+" is  on "+userList.get(i).getSevaDate();
-
+                    String message ="Gentle reminder! "+userList.get(i).getDevoteeName()+", "+userList.get(i).getSevaName()+" is  on "+userList.get(i).getSevaDate().substring(5);
 					String requestUrl  = "http://sms.ssdindia.com/api/sendhttp.php?mobiles="+userList.get(i).getContactNum()+"&authkey=17650A5fTICfF5d6792b4&route=5&sender=WEBSMS&message="+message+"&country=91";
 	        		URL url = new URL(requestUrl);
 	        		HttpURLConnection uc = (HttpURLConnection)url.openConnection();
 	        		System.out.println(uc.getResponseMessage());
 	        		uc.disconnect();
-			        		System.out.println("num HERE: "+userList.get(i).getContactNum());
-
 				}
 
 				rs.close();
