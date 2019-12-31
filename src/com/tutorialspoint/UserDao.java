@@ -446,7 +446,7 @@ public class UserDao {
 					}
 					if((pUser.getSevaName()).equals("shaswatha-seva")) {
 						String message ="Hello, "+pUser.getDevoteeName()+" Seva Created Successfully for "+pUser.getSevaName()+" on "+pUser.getSevaDate();
-						String requestUrl  = "http://sms.ssdindia.com/api/sendhttp.php?mobiles="+pUser.getContactNum()+"&authkey=17650A5fTICfF5d6792b4&route=5&sender=WEBSMS&message="+message+"&country=91";
+						String requestUrl  = "http://sms.ssdindia.com/api/sendhttp.php?mobiles="+pUser.getContactNum()+"&authkey=17806AgdJyKYq5e0ae70aP20&route=5&sender=WEBSMS&message="+message+"&country=91";
 			        	URL url = new URL(requestUrl);
 			        	HttpURLConnection uc = (HttpURLConnection)url.openConnection();
 			        	System.out.println(uc.getResponseMessage());
@@ -535,7 +535,7 @@ public class UserDao {
 					System.out.println("Name: "+userList.get(i).getDevoteeName());				
 
                     String message ="Gentle reminder! "+userList.get(i).getDevoteeName()+", "+userList.get(i).getSevaName()+" is  on "+userList.get(i).getSevaDate().substring(8)+"/"+userList.get(i).getSevaDate().substring(5,7);
-					String requestUrl  = "http://sms.ssdindia.com/api/sendhttp.php?mobiles="+userList.get(i).getContactNum()+"&authkey=17650A5fTICfF5d6792b4&route=5&sender=WEBSMS&message="+message+"&country=91";
+					String requestUrl  = "http://sms.ssdindia.com/api/sendhttp.php?mobiles="+userList.get(i).getContactNum()+"&authkey=17806AgdJyKYq5e0ae70aP20&route=5&sender=WEBSMS&message="+message+"&country=91";
 	        		URL url = new URL(requestUrl); 
 	        		HttpURLConnection uc = (HttpURLConnection)url.openConnection();
 	        		System.out.println(uc.getResponseMessage());
