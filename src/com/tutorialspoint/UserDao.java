@@ -26,10 +26,11 @@ import java.util.Calendar;
 import java.util.List;
 
 public class UserDao {
+	String PortNumber="3305";
+	String password = "Champions@1";
 	public List<User> getAllUsers(){
 		List<User> userList = null;
 		Statement stmt = null;
-
 		try {
 
 			System.out.println("-------- MySQL JDBC Connection Testing ------------");
@@ -47,7 +48,7 @@ public class UserDao {
 
 			try {
 				connection = DriverManager
-						.getConnection("jdbc:mysql://localhost:3305/temple","root", "Champions@1"); // Champions@1
+						.getConnection("jdbc:mysql://localhost:"+PortNumber+"/temple","root", password); // Champions@1
 
 			} catch (SQLException e) {
 				System.out.println("Connection Failed! Check output console");
@@ -130,7 +131,7 @@ public class UserDao {
 
 			try {
 				connection = DriverManager
-						.getConnection("jdbc:mysql://localhost:3305/temple","root", "Champions@1");
+						.getConnection("jdbc:mysql://localhost:"+PortNumber+"/temple","root", password);
 
 			} catch (SQLException e) {
 				System.out.println("Connection Failed! Check output console");
@@ -254,7 +255,7 @@ public class UserDao {
 
 			try {
 				connection = DriverManager
-						.getConnection("jdbc:mysql://localhost:3305/temple","root", "Champions@1");
+						.getConnection("jdbc:mysql://localhost:"+PortNumber+"/temple","root", password);
 
 			} catch (SQLException e) {
 				System.out.println("Connection Failed! Check output console");
@@ -404,7 +405,7 @@ public class UserDao {
 
 			try {
 				connection = DriverManager
-						.getConnection("jdbc:mysql://localhost:3305/temple","root", "Champions@1");
+						.getConnection("jdbc:mysql://localhost:"+PortNumber+"/temple","root", password);
 
 			} catch (SQLException e) {
 				System.out.println("Connection Failed! Check output console");
@@ -446,7 +447,7 @@ public class UserDao {
 					}
 					if((pUser.getSevaName()).equals("shaswatha-seva")) {
 						String message ="Hello, "+pUser.getDevoteeName()+" Seva Created Successfully for "+pUser.getSevaName()+" on "+pUser.getSevaDate();
-						String requestUrl  = "http://sms.ssdindia.com/api/sendhttp.php?mobiles="+pUser.getContactNum()+"&authkey=17806AgdJyKYq5e0ae70aP20&route=5&sender=WEBSMS&message="+message+"&country=91";
+						String requestUrl  = "http://sms.ssdindia.com/api/sendhttp.php?mobiles="+pUser.getContactNum()+"&authkey=17806AgdJyKYq5e0ae70aP20&route=4&sender=WEBSMS&message="+message+"&country=91";
 			        	URL url = new URL(requestUrl);
 			        	HttpURLConnection uc = (HttpURLConnection)url.openConnection();
 			        	System.out.println(uc.getResponseMessage());
@@ -492,7 +493,7 @@ public class UserDao {
 
 			try {
 				connection = DriverManager
-						.getConnection("jdbc:mysql://localhost:3305/temple","root", "Champions@1");
+						.getConnection("jdbc:mysql://localhost:"+PortNumber+"/temple","root", password);
 
 			} catch (SQLException e) {
 				System.out.println("Connection Failed! Check output console");
@@ -532,10 +533,10 @@ public class UserDao {
 					String recipient =userList.get(i).getContactNum();
 					System.out.println("Number: "+userList.get(i).getContactNum());
 					System.out.println("Seva Date: "+userList.get(i).getSevaDate());				
-					System.out.println("Name: "+userList.get(i).getDevoteeName());				
+					System.out.println("Name: "+userList.get(i).getDevoteeName());				 
 
                     String message ="Gentle reminder! "+userList.get(i).getDevoteeName()+", "+userList.get(i).getSevaName()+" is  on "+userList.get(i).getSevaDate().substring(8)+"/"+userList.get(i).getSevaDate().substring(5,7);
-					String requestUrl  = "http://sms.ssdindia.com/api/sendhttp.php?mobiles="+userList.get(i).getContactNum()+"&authkey=17806AgdJyKYq5e0ae70aP20&route=5&sender=WEBSMS&message="+message+"&country=91";
+					String requestUrl  = "http://sms.ssdindia.com/api/sendhttp.php?mobiles="+userList.get(i).getContactNum()+"&authkey=17806AgdJyKYq5e0ae70aP20&route=4&sender=WEBSMS&message="+message+"&country=91";
 	        		URL url = new URL(requestUrl); 
 	        		HttpURLConnection uc = (HttpURLConnection)url.openConnection();
 	        		System.out.println(uc.getResponseMessage());
