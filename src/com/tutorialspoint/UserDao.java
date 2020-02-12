@@ -335,7 +335,14 @@ public class UserDao {
 	public int addUser(User pUser){
 		return saveUserList(pUser);
 		
-
+	}
+	
+	public int addSevaType(SevaType pUser){
+		return addSevaTypeList(pUser);
+	}
+	
+	public int addExpenses(Expenses pUser){
+		return addExpensesList(pUser);
 	}
 
 	public int updateUser(User pUser){
@@ -474,7 +481,6 @@ public class UserDao {
       return retId;
 	}
 
-
 	String  SmsUtlity() {
 		try {
 
@@ -562,5 +568,264 @@ public class UserDao {
 
 
 	}
+
+	private int addSevaTypeList(SevaType pUser){
+		int retId =0;
+		try {
+			PreparedStatement preparedStmt = null;
+			System.out.println("-------- MySQL JDBC Connection Testing ------------");
+
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+			} catch (ClassNotFoundException e) {
+				System.out.println("Where is your MySQL JDBC Driver?");
+				e.printStackTrace();
+
+			}
+
+			System.out.println("MySQL JDBC Driver Registered!");
+			Connection connection = null;
+
+			try {
+				connection = DriverManager
+						.getConnection("jdbc:mysql://localhost:"+PortNumber+"/temple","root", password);
+
+			} catch (SQLException e) {
+				System.out.println("Connection Failed! Check output console");
+				e.printStackTrace();
+
+			}
+			//#####################################################
+			if (connection != null) {
+					System.out.println("You made it, take control your database now!");
+					String sql = "insert into SEVATYPE (SEVANAME, SEVALABEL)"+ " values (?,?)";
+					System.out.println("You made it, take control your database now! 1");
+					// create the mysql insert preparedstatement
+					preparedStmt =connection.prepareStatement(sql);
+					preparedStmt.setString(1,pUser.getSevaName());
+					preparedStmt.setString (2, pUser.getSevaLabel());
+
+					// execute the preparedstatement
+					
+					int flag= preparedStmt.executeUpdate();
+					System.out.println("flag::"+ flag);
+					if(flag==1) {
+						retId = pUser.getId();						
+					}
+					connection.close();			
+
+			}
+			else {
+				System.out.println("Failed to make connection!");
+			}
+
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+
+      return retId;
+	}
+	
+	
+	public List<SevaType> getSevatype(){
+		List<SevaType> sevaTypeList = null;
+		Statement stmt = null;
+		try {
+			System.out.println("-------- MySQL JDBC Connection Testing ------------");
+
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+			} catch (ClassNotFoundException e) {
+				System.out.println("Where is your MySQL JDBC Driver?");
+				e.printStackTrace();
+				return null;
+			}
+
+			System.out.println("MySQL JDBC Driver Registered!");
+			Connection connection = null;
+
+			try {
+				connection = DriverManager
+						.getConnection("jdbc:mysql://localhost:"+PortNumber+"/temple","root", password);
+
+			} catch (SQLException e) {
+				System.out.println("Connection Failed! Check output console");
+				e.printStackTrace();
+				return null;
+			}
+
+			if (connection != null) {
+				System.out.println("You made it, take control your database now!");
+				File file = new File("Users.dat");
+				if (1 == 0) {
+					//	    	            User user = new User(1, "Mahesh",1,"b","a","A");
+					//	    	            userList = new ArrayList<User>();
+					//	    	            userList.add(user);
+					//	    	            saveUserList(userList);		
+				}
+				else{
+					System.out.println("You made it, take control your database now!");
+					// FileInputStream fis = new FileInputStream(file);
+					// ObjectInputStream ois = new ObjectInputStream(fis);
+					//userList = (List<User>) ois.readObject();
+					//ois.close();
+					String sql = null;
+					sql = "SELECT ID,SEVANAME,SEVALABEL  FROM SEVATYPE";	 
+					stmt = connection.createStatement();
+					ResultSet rs = stmt.executeQuery(sql);
+					//STEP 5: Extract data from result set
+					sevaTypeList = new ArrayList<SevaType>();
+					while(rs.next()){
+						//Retrieve by column name
+						int id  = rs.getInt("id");
+						String sevaName = rs.getString("SEVANAME");
+						String sevaLabel = rs.getString("SEVALABEL");
+						SevaType sevaType = new SevaType(id, sevaName, sevaLabel);
+						sevaTypeList.add(sevaType);
+					}
+
+					rs.close();
+
+				}
+			} else {
+				System.out.println("Failed to make connection!");
+			}
+
+		} catch (Exception e) {
+			System.out.println("Failed: "+e.getMessage());
+		}		
+		return sevaTypeList;
+	}
+
+	public List<Expenses> getExpenses(String from, String to){
+		List<Expenses> expensesList = null;
+		Statement stmt = null;
+		try {
+			System.out.println("-------- MySQL JDBC Connection Testing ------------");
+
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+			} catch (ClassNotFoundException e) {
+				System.out.println("Where is your MySQL JDBC Driver?");
+				e.printStackTrace();
+				return null;
+			}
+
+			System.out.println("MySQL JDBC Driver Registered!");
+			Connection connection = null;
+
+			try {
+				connection = DriverManager
+						.getConnection("jdbc:mysql://localhost:"+PortNumber+"/temple","root", password);
+
+			} catch (SQLException e) {
+				System.out.println("Connection Failed! Check output console");
+				e.printStackTrace();
+				return null;
+			}
+
+			if (connection != null) {
+					String sql = null;
+					    if((from == null)&&( to == null)) {
+							sql = "SELECT id,description,amount,paymentDate,paidto FROM EXPENSES";	 
+						}else if((to == null)) {
+							sql = "SELECT id,description,amount,paymentDate,paidto FROM EXPENSES WHERE paymentDate>="+"\'"+from+"\'";
+						}else if((from == null)) {
+							sql = "SELECT id,description,amount,paymentDate,paidto FROM EXPENSES WHERE paymentDate<="+"\'"+to+"\'";
+						}else {
+							sql = "SELECT id,description,amount,paymentDate,paidto FROM EXPENSES WHERE paymentDate<="+"\'"+to+"\'"+"and paymentDate>="+"\'"+from+"\'";
+						}
+					
+					System.out.println("You made it, take control your database now! 1");
+					stmt = connection.createStatement();
+					ResultSet rs = stmt.executeQuery(sql);
+					//STEP 5: Extract data from result set
+					System.out.println("You made it, take control your database now! 2");
+					expensesList = new ArrayList<Expenses>();
+					while(rs.next()){
+						//Retrieve by column name
+						System.out.println("You made it, take control your database now!");
+						int id  = rs.getInt("id");
+						String description = rs.getString("description");
+						int amount  = rs.getInt("amount");
+						String paidto = rs.getString("paidto");
+						Date paymentDate = rs.getDate("paymentDate");
+						//Display values
+						Expenses expenses = new Expenses(id,amount,description,paidto,paymentDate.toString());
+						expensesList.add(expenses);	
+					}
+					rs.close();
+
+				
+			} else {
+				System.out.println("Failed to make connection!");
+			}
+
+		} catch (Exception e) {
+			System.out.println("Failed: "+e.getMessage());
+		}		
+		return expensesList;
+	}
+
+	private int addExpensesList(Expenses pUser){
+		int retId =0;
+		try {
+			PreparedStatement preparedStmt = null;
+			System.out.println("-------- MySQL JDBC Connection Testing ------------");
+
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+			} catch (ClassNotFoundException e) {
+				System.out.println("Where is your MySQL JDBC Driver?");
+				e.printStackTrace();
+
+			}
+
+			System.out.println("MySQL JDBC Driver Registered!");
+			Connection connection = null;
+
+			try {
+				connection = DriverManager
+						.getConnection("jdbc:mysql://localhost:"+PortNumber+"/temple","root", password);
+
+			} catch (SQLException e) {
+				System.out.println("Connection Failed! Check output console");
+				e.printStackTrace();
+
+			}
+			//#####################################################
+			if (connection != null) {
+					System.out.println("You made it, take control your database now!");
+					String sql = "insert into EXPENSES (DESCRIPTION,AMOUNT,PAYMENTDATE,PAIDTO)"+ " values (?,?,?,?)";
+					System.out.println("You made it, take control your database now! 1");
+					// create the mysql insert preparedstatement
+					preparedStmt =connection.prepareStatement(sql);
+					preparedStmt.setString(1,pUser.getDescription());
+					preparedStmt.setInt (2, pUser.getAmount());
+					preparedStmt.setDate(3,Date.valueOf(pUser.getPaymentDate()));
+					preparedStmt.setString(4,pUser.getPaidTo());
+					
+
+					// execute the preparedstatement
+					
+					int flag= preparedStmt.executeUpdate();
+					System.out.println("flag::"+ flag);
+					if(flag==1) {
+						retId = pUser.getId();						
+					}
+					connection.close();			
+
+			}
+			else {
+				System.out.println("Failed to make connection!");
+			}
+
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+
+      return retId;
+	}
+
 }
 

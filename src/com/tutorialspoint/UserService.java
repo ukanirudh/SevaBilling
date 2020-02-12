@@ -39,6 +39,22 @@ public class UserService {
 			@QueryParam("to") String to,@QueryParam("searchParam") String searchParam){
        return userDao.getAllUsers(name,from,to,searchParam);
    }
+   @GET
+   @Path("/expenses")
+   
+   @Produces(MediaType.APPLICATION_JSON)
+   public List<Expenses> getExpenses(@QueryParam("from") String from,
+			@QueryParam("to") String to){
+       return userDao.getExpenses(from,to);
+   }
+   
+   @GET
+   @Path("/sevatype")
+   
+   @Produces(MediaType.APPLICATION_JSON)
+   public List<SevaType> getSevatype(){
+       return userDao.getSevatype();
+   }
    
    @GET
    @Path("/seva/sevaName")
@@ -157,7 +173,46 @@ public class UserService {
        
      }
    
+   @POST
+   @Path("/sevatype")
+   @Produces(MediaType.APPLICATION_JSON)
+   @Consumes(MediaType.APPLICATION_JSON)
+   public Response addSevaType( SevaType   input){
+       System.out.println("Received order from :"+input);
+       SevaType sevaType = new SevaType(1,input.getSevaName(),input.getSevaLabel());
+       int result = userDao.addSevaType(sevaType);
+		System.out.println("result::"+ result);
+       if(result != 0){
+    	   String resultString = "{\"success\":true,\"message\": \"success\",\"data\":" +result+"}";
+
+           return Response.status(200).entity(resultString).build(); 
+       }
+       else {
+   	       String resultString = "{\"success\":false,\"message\": \"Duplicate entry for Id. please give another number\",\"data\":null}";
+           return Response.status(400).entity(resultString).build(); 
+    	   
+        } 
+   }
    
+   @POST
+   @Path("/expenses")
+   @Produces(MediaType.APPLICATION_JSON)
+   @Consumes(MediaType.APPLICATION_JSON)
+   public Response addExpenses( Expenses   input){
+	   Expenses expenses = new Expenses(1,input.getAmount(),input.getDescription(),input.getPaidTo(),input.getPaymentDate());
+       int result = userDao.addExpenses(expenses);
+		System.out.println("result::"+ result);
+       if(result != 0){
+    	   String resultString = "{\"success\":true,\"message\": \"success\",\"data\":" +result+"}";
+
+           return Response.status(200).entity(resultString).build(); 
+       }
+       else {
+   	       String resultString = "{\"success\":false,\"message\": \"Duplicate entry for Id. please give another number\",\"data\":null}";
+           return Response.status(400).entity(resultString).build(); 
+    	   
+        } 
+   }
    
    
    
